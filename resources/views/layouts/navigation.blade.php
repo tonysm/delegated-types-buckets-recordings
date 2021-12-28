@@ -15,6 +15,10 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('buckets.todos.index', auth()->user()->bucket)" :active="request()->routeIs('buckets.todos.*')">
+                        {{ __('Todos') }}
+                    </x-nav-link>
                 </div>
             </div>
 
