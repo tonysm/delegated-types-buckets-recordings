@@ -21,6 +21,11 @@ class Bucket extends Model
         return $this->hasMany(Recording::class);
     }
 
+    public function feedItems()
+    {
+        return $this->hasMany(FeedItem::class);
+    }
+
     public function record(Model $recordable, $children = null, $parent = null, $status = 'active', $creator = null, array $options = [])
     {
         $creator ??= auth()->user();

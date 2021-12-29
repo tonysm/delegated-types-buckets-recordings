@@ -15,6 +15,33 @@ class Recording extends Model
         'creator',
     ];
 
+    public static function booted()
+    {
+        static::created(function ($recording) {
+            $recording->bucket->feedItems()->create([
+                'event' => 'created',
+                'recording' => $recording,
+                'recordable' => $recording->recordable,
+            ]);
+        });
+
+        static::updated(function ($recording) {
+            $recording->bucket->feedItems()->create([
+                'event' => 'updated',
+                'recording' => $recording,
+                'recordable' => $recording->recordable,
+            ]);
+        });
+
+        static::deleted(function ($recording) {
+            $recording->bucket->feedItems()->create([
+                'event' => 'deleted',
+                'recording' => $recording,
+                'recordable' => $recording->recordable,
+            ]);
+        });
+    }
+
     public function bucket()
     {
         return $this->belongsTo(Bucket::class);
@@ -48,5 +75,23 @@ class Recording extends Model
     public function setParentAttribute($parent)
     {
         $this->parent()->associate($parent);
+    }
+
+    public function feedName()
+    {
+        return $this->recordable->feedName();
+    }
+
+    public function showRoute()
+    {
+        return $this->recordable->showRoute();
+    }
+
+    public function showTodoRoute()
+    {
+        return route('buckets.todos.show', [
+            'bucket' => $this->bucket,
+            'recording' => $this,
+        ]);
     }
 }

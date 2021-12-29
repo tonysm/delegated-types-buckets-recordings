@@ -16,6 +16,16 @@ class Todo extends Model
 
     public function recording()
     {
-        return $this->belongsTo(Recording::class);
+        return $this->morphOne(Recording::class, 'recordable')->withTrashed();
+    }
+
+    public function feedName()
+    {
+        return __('Todo ":title""', ['title' => $this->title]);
+    }
+
+    public function showRoute()
+    {
+        return $this->recording->showTodoRoute();
     }
 }

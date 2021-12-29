@@ -4,7 +4,7 @@ namespace App\Models;
 
 trait Bucketable
 {
-    public static function booted()
+    public static function bootBucketable()
     {
         static::created(function ($model) {
             $model->bucket()->create();

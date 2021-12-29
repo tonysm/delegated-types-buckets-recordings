@@ -20,7 +20,13 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('dashboard', [
+            'feedItems' => auth()->user()->bucket
+                ->feedItems()
+                ->latest()
+                ->take(50)
+                ->get(),
+        ]);
     })->name('dashboard');
 
     Route::resource('buckets.todos', Controllers\BucketTodosController::class)
